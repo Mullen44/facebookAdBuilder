@@ -1,0 +1,1 @@
+This project creates a simple web application using Django application using Python and ReactJS for the front end
