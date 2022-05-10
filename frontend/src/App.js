@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 
 import { Form } from "react-bootstrap"
 
+import axios from "axios"
+
 
 
 const imageURL = [
@@ -20,7 +22,8 @@ class App extends React.Component {
         super(props)
         this.state = {
             headline: '',
-            img: 0
+            img: 0,
+            adList: []
         }
 
         this.handleImgChange = this.handleImgChange.bind(this)
@@ -35,6 +38,23 @@ class App extends React.Component {
     handleImgChange(event) {
         this.setState({img: event.target.value})
     }
+
+    componentDidMount() {
+        this.refreshList()
+    }
+
+    refreshList = () => {
+        axios
+            .get("/api/adBuilder/")
+            .then((res) => this.setState({adList: res.data}))
+            .catch((err) => console.log(err))
+    }
+    /*
+    handleLoadAd = () => {
+        this.setState({headline: adList.headline})
+    }
+    */
+
 
 
     render() {
@@ -66,7 +86,12 @@ class App extends React.Component {
                         <div>
                             <form>
                                 <select>
-                                    <option value='Ad 1'>Ad 1</option>
+                                    {this.state.adList.map(ad => {
+                                        return (
+                                            <option value={ad.headline}>{ad.headline}</option>
+                                        );
+                                    })}
+
                                 </select>
                                 <button>Load Selected Ad</button>
                             </form>
@@ -98,6 +123,8 @@ class App extends React.Component {
 
             </div>
             </center>
+
+
         )
     }
 }
