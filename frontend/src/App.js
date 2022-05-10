@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 
 import { Form } from "react-bootstrap"
 
+
+
 const imageURL = [
     "https://sites.imsa.edu/acronym/files/2019/03/advertising-777x437.png",
     "https://www.stretchingabuckblog.com/wp-content/uploads/2013/11/home-depot-black-friday-ad-2013.jpg",
@@ -34,26 +36,43 @@ class App extends React.Component {
         this.setState({img: event.target.value})
     }
 
-    
+
     render() {
         return (
+            <center>
             <div className="wrapper">
                 <h1>Facebook Ad Builder</h1>
-                <form>
-                    <Form.Group>
-                        <Form.Label>Headline: </Form.Label>
-                        <input type="text" value={this.state.headline} onChange={this.handleTextChange}/>
-                    </Form.Group>
-                    <h2></h2>
-                    <Form.Label>Select Image: </Form.Label>
-                    <select  value={this.state.img} onChange={this.handleImgChange}>
-                        <option value={1}>Image 1</option>
-                        <option value={2}>Image 2</option>
-                        <option value={3}>Image 3</option>
-                        <option value={4}>Image 4</option>
-                    </select>
+                <div class='parent'>
+                    <div class='child inline-block-child'>
+                        <h4>Build New Ad</h4>
+                        <form>
+                            <Form.Group>
+                                <Form.Label>Headline: </Form.Label>
+                                <input type="text" value={this.state.headline} onChange={this.handleTextChange}/>
+                            </Form.Group>
+                            <h2></h2>
+                            <Form.Label>Select Image: </Form.Label>
+                            <select  value={this.state.img} onChange={this.handleImgChange}>
+                                <option value={1}>Image 1</option>
+                                <option value={2}>Image 2</option>
+                                <option value={3}>Image 3</option>
+                                <option value={4}>Image 4</option>
+                            </select>
 
-                </form>
+                        </form>
+                    </div>
+                    <div class='child inline-block-child'>
+                        <h4>Reload Ad</h4>
+                        <div>
+                            <form>
+                                <select>
+                                    <option value='Ad 1'>Ad 1</option>
+                                </select>
+                                <button>Load Selected Ad</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
                 <div>
                     <div>
@@ -67,9 +86,7 @@ class App extends React.Component {
 
                             />
                             <div>
-                                <caption className='figure-caption'>
-                                    <span>{this.state.headline}</span>
-                                </caption>
+                                <h6>{this.state.headline}</h6>
                             </div>
                         </figure>
                     </div>
@@ -79,8 +96,8 @@ class App extends React.Component {
                     <button>Cancel</button>
                 </div>
 
-
             </div>
+            </center>
         )
     }
 }
