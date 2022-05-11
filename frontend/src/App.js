@@ -23,20 +23,17 @@ class App extends React.Component {
         this.state = {
             headline: '',
             img: 0,
-            adList: []
+            adList: [],
+            ad: 0,
         }
 
         this.handleImgChange = this.handleImgChange.bind(this)
 
         this.handleTextChange = this.handleTextChange.bind(this)
-    }
 
-    handleTextChange(event) {
-        this.setState({headline: event.target.value})
-    }
+        this.handleLoadAd = this.handleLoadAd.bind(this)
 
-    handleImgChange(event) {
-        this.setState({img: event.target.value})
+        this.handleSave = this.handleSave.bind(this)
     }
 
     componentDidMount() {
@@ -49,46 +46,83 @@ class App extends React.Component {
             .then((res) => this.setState({adList: res.data}))
             .catch((err) => console.log(err))
     }
-    /*
-    handleLoadAd = () => {
-        this.setState({headline: adList.headline})
+
+    handleTextChange(event) {
+        this.setState({headline: event.target.value})
     }
-    */
 
+    handleImgChange(event) {
+        this.setState({img: event.target.value})
+    }
 
+    handleSave() {
+        axios
+            .post("/api/adBuilder/", {
+                headline: this.state.headline,
+                image: this.state.img
+            })
+            .then(function(response) {
+                console.log(response);
+            })
+            .catch(function(error) {
+                console.log(error)
+            })
+    }
+
+    //////// Not working
+    handleLoadAd (event) {
+
+        this.setState({headline: event.target.value.headline})
+        this.setState({img: event.target.value.image})
+        this.setState({ad: event.target.value})
+    }
 
     render() {
         return (
-            <center>
-            <div className="wrapper">
+
+            <div className="container">
                 <h1>Facebook Ad Builder</h1>
-                <div class='parent'>
-                    <div class='child inline-block-child'>
+                <div className="row">
+                    <div className="col">
                         <h4>Build New Ad</h4>
                         <form>
                             <Form.Group>
                                 <Form.Label>Headline: </Form.Label>
-                                <input type="text" value={this.state.headline} onChange={this.handleTextChange}/>
+                                <input type="text"
+                                       value={this.state.headline}
+                                       onChange={this.handleTextChange}/>
                             </Form.Group>
-                            <h2></h2>
-                            <Form.Label>Select Image: </Form.Label>
-                            <select  value={this.state.img} onChange={this.handleImgChange}>
-                                <option value={1}>Image 1</option>
-                                <option value={2}>Image 2</option>
-                                <option value={3}>Image 3</option>
-                                <option value={4}>Image 4</option>
-                            </select>
+
+                            <div className={"input-group mb-3"}>
+                                <div className={"input-group-prepend"}>
+                                    <label className="input-group-text" htmlFor="inputGroupSelect01">Select Image: </label>
+                                </div>
+                                <select class={"custom-select"}
+                                        id={"inputGroupSelect01"}
+                                        value={this.state.img}
+                                        onChange={this.handleImgChange}>
+                                    <option selected>Choose...</option>
+                                    <option value={1}>Image 1</option>
+                                    <option value={2}>Image 2</option>
+                                    <option value={3}>Image 3</option>
+                                    <option value={4}>Image 4</option>
+                                </select>
+                            </div>
 
                         </form>
                     </div>
-                    <div class='child inline-block-child'>
+
+                    <div className="col">
+
                         <h4>Reload Ad</h4>
                         <div>
                             <form>
-                                <select>
+                                <select value={this.state.ad} onChange= {this.handleLoadAd}>
+                                    <option selected>Choose...</option>
                                     {this.state.adList.map(ad => {
                                         return (
-                                            <option value={ad.headline}>{ad.headline}</option>
+                                            <option value={ad}>{ad.headline}</option>
+
                                         );
                                     })}
 
@@ -96,12 +130,13 @@ class App extends React.Component {
                                 <button>Load Selected Ad</button>
                             </form>
                         </div>
-                    </div>
-                </div>
 
-                <div>
-                    <div>
-                        <h3>Ad Preview</h3>
+
+                    </div>
+
+                    <div className="col">
+
+                        <h4>Ad Preview</h4>
                         <figure className='figure' style={{maxWidth: '22rem'}}>
                             <img
                                 src={imageURL[this.state.img]}
@@ -114,16 +149,17 @@ class App extends React.Component {
                                 <h6>{this.state.headline}</h6>
                             </div>
                         </figure>
+                        <div>
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    onClick={this.handleSave}>Save</button>
+                            <button type="button" class="btn btn-secondary">Cancel</button>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <button>Save</button>
-                    <button>Cancel</button>
+
                 </div>
 
             </div>
-            </center>
-
 
         )
     }
